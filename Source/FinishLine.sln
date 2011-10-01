@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinishLine.Library.Infrastr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinishLine.Library.Model", "FinishLine.Library.Model\FinishLine.Library.Model.csproj", "{4698DC38-4DC2-4B13-A29E-D18E99897DA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinishLine.Library.Repository.Raven", "FinishLine.Library.Repository.Raven\FinishLine.Library.Repository.Raven.csproj", "{82B5D7BC-AD7A-47FB-8102-0E0B61E95258}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinishLine.Library.Services", "FinishLine.Library.Services\FinishLine.Library.Services.csproj", "{FD0B4449-6989-4C9F-9263-08AC288EFD21}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinishLine.Library.Services.Cache", "FinishLine.Library.Services.Cache\FinishLine.Library.Services.Cache.csproj", "{CBDEEF4F-D08E-46BF-A8E9-29D4FF0169A2}"
@@ -45,10 +43,6 @@ Global
 		{4698DC38-4DC2-4B13-A29E-D18E99897DA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4698DC38-4DC2-4B13-A29E-D18E99897DA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4698DC38-4DC2-4B13-A29E-D18E99897DA9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{82B5D7BC-AD7A-47FB-8102-0E0B61E95258}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82B5D7BC-AD7A-47FB-8102-0E0B61E95258}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{82B5D7BC-AD7A-47FB-8102-0E0B61E95258}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{82B5D7BC-AD7A-47FB-8102-0E0B61E95258}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FD0B4449-6989-4C9F-9263-08AC288EFD21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FD0B4449-6989-4C9F-9263-08AC288EFD21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD0B4449-6989-4C9F-9263-08AC288EFD21}.Release|Any CPU.ActiveCfg = Release|Any CPU
