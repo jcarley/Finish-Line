@@ -1,10 +1,12 @@
+using System;
 using System.Data;
-using System.Reflection;
-using FluentNHibernate;
-using FluentNHibernate.Cfg.Db;
+using System.Linq;
+using FinishLine.Library.Repository.NHibernate.ClassMaps;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
+using NHibernate.Driver;
+using NHibernate.Mapping.ByCode;
 
 namespace FinishLine.Library.Repository.NHibernate
 {
@@ -33,27 +35,32 @@ namespace FinishLine.Library.Repository.NHibernate
 
         private Configuration AssemblyConfiguration(string mappingExportPath)
         {
-            var persistenceConfigurer = GetConfiguration();
-            var persistenceModel = new PersistenceModel();
+            var mapper = GetModelMapper();
 
-            var configuration = persistenceConfigurer.ConfigureProperties(new Configuration());
+            var cfg = new Configuration();
+
+            cfg.DataBaseIntegration(c =>
+                {
+                    c.ConnectionString = _databaseSettings.ConnectionString;
+
+                    c.Driver<SqlClientDriver>();
+                    c.Dialect<MsSql2008Dialect>();
+
+                    c.LogSqlInConsole = true;
+                    c.LogFormattedSql = true;
+
+                    c.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
+                    c.SchemaAction = SchemaAutoAction.Create;
+                });
+
+            cfg.AddMapping(mapper.CompileMappingForAllExplicitlyAddedEntities());
 
             //TODO:  Add event listeners
-            //configuration.SetListener(ListenerType.PostUpdate, null);
-            //configuration.SetListener(ListenerType.PostInsert, null);
-            //configuration.SetListener(ListenerType.PostDelete, null);
+            //cfg.SetListener(ListenerType.PostUpdate, null);
+            //cfg.SetListener(ListenerType.PostInsert, null);
+            //cfg.SetListener(ListenerType.PostDelete, null);
 
-            // specify the assembly that has the class mappings
-            persistenceModel.AddMappingsFromAssembly(Assembly.GetExecutingAssembly());
-            persistenceModel.Configure(configuration);
-
-            // writes out the NHibernate mapping file
-            if (!string.IsNullOrEmpty(mappingExportPath))
-            {
-                persistenceModel.WriteMappingsTo(mappingExportPath);
-            }
-
-            return configuration;
+            return cfg;
         }
 
         public ISession CreateSession()
@@ -88,21 +95,23 @@ namespace FinishLine.Library.Repository.NHibernate
             //schemaExport.Execute(true, true, false);
         }
 
-        private IPersistenceConfigurer GetConfiguration()
+
+        private ModelMapper GetModelMapper()
         {
-            var configuration = MsSqlConfiguration.MsSql2008
-                .ConnectionString(_databaseSettings.ConnectionString);
-            //.Provider(_databaseSettings.Provider)
-            //.Driver(_databaseSettings.Driver)
-            //.Dialect(_databaseSettings.Dialect);
+            var mapper = new ModelMapper();
 
-            //if (_databaseSettings.UseOuterJoin)
-            //    configuration.UseOuterJoin();
+            var classMaps = typeof(NHibernateSessionSource).Assembly
+                .GetTypes()
+                .Where(t => t.IsClass && !t.IsAbstract && typeof(IClassMap).IsAssignableFrom(t))
+                .Select(Activator.CreateInstance)
+                .OfType<IClassMap>();
 
-            //if (_databaseSettings.ShowSql)
-            //    configuration.ShowSql();
+            foreach (var map in classMaps)
+            {
+                map.Map(mapper);
+            }
 
-            return configuration;
+            return mapper;
         }
 
         private void ExecuteScripts(string[] scripts, IDbConnection connection)

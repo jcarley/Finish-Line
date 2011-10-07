@@ -16,7 +16,7 @@ namespace FinishLine.Library.Model
 
             if (StartDate.Empty())
             {
-                AddBrokenRule(IterationBusinessRules.RequiresStartDate);
+                AddBrokenRule(IterationBusinessRules.RequiresStartDate); 
             }
 
             if (EndDate.Empty())
